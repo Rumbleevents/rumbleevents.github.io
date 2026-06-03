@@ -49,6 +49,51 @@
             background-clip: text;
         }
 
+        .countdown {
+            background: rgba(150, 100, 200, 0.6);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .countdown-title {
+            font-size: 11px;
+            color: #e0e0ff;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: space-around;
+            gap: 4px;
+        }
+
+        .countdown-item {
+            flex: 1;
+            background: rgba(100, 50, 150, 0.7);
+            padding: 6px 4px;
+            border-radius: 6px;
+            border: 1px solid rgba(200, 150, 255, 0.3);
+        }
+
+        .countdown-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 9px;
+            color: #d0d0ff;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
         .description {
             color: #f0f0f0;
             font-size: 12px;
@@ -110,6 +155,25 @@
 
     <div class="ticket-card">
         <h1>RumbleXRietschans</h1>
+        
+        <div class="countdown">
+            <div class="countdown-title">Countdown</div>
+            <div class="countdown-timer">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">0</span>
+                    <div class="countdown-label">Dagen</div>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">0</span>
+                    <div class="countdown-label">Uren</div>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">0</span>
+                    <div class="countdown-label">Min</div>
+                </div>
+            </div>
+        </div>
+
         <p class="description">Leuk dat je erbij bent! Vul je gegevens in bij de betaling zodat we je op de gastenlijst kunnen zetten. Voor verdere wensen ook hier vermelden.</p>
         
         <div class="price-tag">
@@ -128,6 +192,40 @@
 
         <p class="footer-note">Na betaling is je aanmelding definitief.</p>
     </div>
+
+    <script>
+        function updateCountdown() {
+            // Target date: July 4th, 2026 at 15:00 (3 PM)
+            const targetDate = new Date(2026, 6, 4, 15, 0, 0).getTime();
+            
+            // Current date and time
+            const now = new Date().getTime();
+            
+            // Calculate the difference
+            const difference = targetDate - now;
+            
+            // Calculate days, hours, and minutes
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            
+            // Update the DOM
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            
+            // If countdown is finished, you could add logic here
+            if (difference < 0) {
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+            }
+        }
+        
+        // Update countdown immediately and then every minute
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+    </script>
 
 </body>
 </html>
