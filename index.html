@@ -10,9 +10,15 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             
-            /* Beautiful gradient background - no image needed */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* Primary background with poster image and dark overlay */
+            background-image: 
+                linear-gradient(135deg, rgba(20, 20, 40, 0.85) 0%, rgba(40, 20, 60, 0.85) 100%),
+                url('https://raw.githubusercontent.com/Rumbleevents/rumbleevents.github.io/main/Poster.PNG');
             
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -28,7 +34,7 @@
             max-width: 450px;
             width: 90%;
             box-sizing: border-box;
-            border: 2px solid rgba(102, 126, 234, 0.2);
+            border: 2px solid rgba(0, 190, 245, 0.2);
         }
 
         h1 {
@@ -36,7 +42,7 @@
             margin: 0 0 15px 0;
             font-size: 32px;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00bef5 0%, #0099cc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -53,11 +59,11 @@
             font-size: 16px;
             font-weight: 600;
             color: #1a1a2e;
-            background: linear-gradient(135deg, #e8eaf6 0%, #f3e5f5 100%);
+            background: linear-gradient(135deg, #e0f7ff 0%, #cce7ff 100%);
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 30px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #00bef5;
         }
 
         .buttons-container {
@@ -68,22 +74,22 @@
 
         .tikkie-button {
             display: block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00bef5 0%, #009ecb 100%);
             color: white;
             text-decoration: none;
             padding: 16px 30px;
             font-weight: 600;
             border-radius: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 190, 245, 0.4);
             border: none;
             cursor: pointer;
             font-size: 16px;
         }
 
         .tikkie-button:hover {
-            background: linear-gradient(135deg, #764ba2 0%, #5a3a8a 100%);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, #009ecb 0%, #0077a3 100%);
+            box-shadow: 0 8px 25px rgba(0, 190, 245, 0.6);
             transform: translateY(-2px);
         }
 
