@@ -157,6 +157,8 @@
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             margin-bottom: 12px;
+            max-height: 500px;
+            overflow-y: auto;
         }
 
         .registration-title {
@@ -185,6 +187,31 @@
         }
 
         .form-input:focus {
+            outline: none;
+            border-color: #ffffff;
+            background: rgba(100, 50, 150, 0.9);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgba(200, 150, 255, 0.5);
+            border-radius: 6px;
+            background: rgba(100, 50, 150, 0.7);
+            color: #ffffff;
+            font-size: 12px;
+            box-sizing: border-box;
+            margin-bottom: 6px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-textarea::placeholder {
+            color: #d0d0ff;
+        }
+
+        .form-textarea:focus {
             outline: none;
             border-color: #ffffff;
             background: rgba(100, 50, 150, 0.9);
@@ -276,7 +303,7 @@
             </div>
         </div>
 
-        <p class="description">Leuk dat je erbij bent! Vul je gegevens in bij de betaling zodat we je op de gastenlijst kunnen zetten. Voor verdere wensen ook hier vermelden.</p>
+        <p class="description">Vul je gegevens hier onder in zodat we je op de gastenlijst kunnen zetten. Voor verdere wensen ook hier vermelden.</p>
         
         <div class="price-tag">
             Kies je bijdrage:
@@ -309,6 +336,11 @@
                     placeholder="jouw@email.com" 
                     required
                 >
+                <textarea 
+                    class="form-textarea" 
+                    id="wishesInput" 
+                    placeholder="Wensen (bijzonderheden, bestellingen, etc.)"
+                ></textarea>
                 <button type="submit" class="register-button" id="registerBtn">Registreren</button>
                 <div class="success-message" id="successMessage">
                     Bedankt! Je bent geregistreerd ✓
@@ -364,6 +396,7 @@
             
             const name = document.getElementById('nameInput').value.trim();
             const email = document.getElementById('emailInput').value.trim();
+            const wishes = document.getElementById('wishesInput').value.trim();
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
             const registerBtn = document.getElementById('registerBtn');
@@ -386,6 +419,7 @@
                     body: JSON.stringify({
                         name: name,
                         email: email,
+                        wishes: wishes,
                         timestamp: new Date().toISOString()
                     })
                 });
@@ -396,6 +430,7 @@
                     registrations.push({
                         name: name,
                         email: email,
+                        wishes: wishes,
                         timestamp: new Date().toISOString()
                     });
                     localStorage.setItem('rumbleRegistrations', JSON.stringify(registrations));
@@ -404,6 +439,7 @@
                     successMessage.style.display = 'block';
                     document.getElementById('nameInput').value = '';
                     document.getElementById('emailInput').value = '';
+                    document.getElementById('wishesInput').value = '';
                     
                     // Hide success message after 3 seconds
                     setTimeout(() => {
