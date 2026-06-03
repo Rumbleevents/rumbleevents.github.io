@@ -123,6 +123,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            margin-bottom: 15px;
         }
 
         .tikkie-button {
@@ -148,6 +149,92 @@
 
         .tikkie-button:active {
             transform: translateY(0);
+        }
+
+        .registration-section {
+            background: rgba(150, 100, 200, 0.6);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 12px;
+        }
+
+        .registration-title {
+            font-size: 11px;
+            color: #e0e0ff;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgba(200, 150, 255, 0.5);
+            border-radius: 6px;
+            background: rgba(100, 50, 150, 0.7);
+            color: #ffffff;
+            font-size: 12px;
+            box-sizing: border-box;
+            margin-bottom: 6px;
+        }
+
+        .form-input::placeholder {
+            color: #d0d0ff;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ffffff;
+            background: rgba(100, 50, 150, 0.9);
+        }
+
+        .register-button {
+            width: 100%;
+            background: linear-gradient(135deg, #9966cc 0%, #7a4ba3 100%);
+            color: white;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(153, 102, 204, 0.5);
+        }
+
+        .register-button:hover {
+            background: linear-gradient(135deg, #7a4ba3 0%, #6a3a93 100%);
+            box-shadow: 0 6px 20px rgba(153, 102, 204, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .register-button:disabled {
+            background: linear-gradient(135deg, #6a6a7a 0%, #5a5a7a 100%);
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            display: none;
+            background: rgba(76, 175, 80, 0.8);
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .error-message {
+            display: none;
+            background: rgba(244, 67, 54, 0.8);
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-top: 8px;
+            text-align: center;
         }
 
         .footer-note {
@@ -205,6 +292,33 @@
             </a>
         </div>
 
+        <div class="registration-section">
+            <div class="registration-title">Registreer hier</div>
+            <form id="registrationForm">
+                <input 
+                    type="text" 
+                    class="form-input" 
+                    id="nameInput" 
+                    placeholder="Volledige naam" 
+                    required
+                >
+                <input 
+                    type="email" 
+                    class="form-input" 
+                    id="emailInput" 
+                    placeholder="jouw@email.com" 
+                    required
+                >
+                <button type="submit" class="register-button" id="registerBtn">Registreren</button>
+                <div class="success-message" id="successMessage">
+                    Bedankt! Je bent geregistreerd ✓
+                </div>
+                <div class="error-message" id="errorMessage">
+                    Er is een fout opgetreden. Probeer het later opnieuw.
+                </div>
+            </form>
+        </div>
+
         <p class="footer-note">Na betaling is je aanmelding definitief.</p>
     </div>
 
@@ -243,6 +357,69 @@
         // Update countdown immediately and then every second for live countdown
         updateCountdown();
         setInterval(updateCountdown, 1000);
+
+        // Registration form handler
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('nameInput').value.trim();
+            const email = document.getElementById('emailInput').value.trim();
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const registerBtn = document.getElementById('registerBtn');
+            
+            // Reset messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Disable button during submission
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Bezig...';
+            
+            try {
+                // Send data to backend service (FormSubmit or similar)
+                const response = await fetch('https://formspree.io/f/mnlljkdo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+                
+                if (response.ok) {
+                    // Store locally as backup
+                    let registrations = JSON.parse(localStorage.getItem('rumbleRegistrations')) || [];
+                    registrations.push({
+                        name: name,
+                        email: email,
+                        timestamp: new Date().toISOString()
+                    });
+                    localStorage.setItem('rumbleRegistrations', JSON.stringify(registrations));
+                    
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    document.getElementById('nameInput').value = '';
+                    document.getElementById('emailInput').value = '';
+                    
+                    // Hide success message after 3 seconds
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                } else {
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.style.display = 'block';
+            } finally {
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Registreren';
+            }
+        });
     </script>
 
 </body>
