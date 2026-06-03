@@ -8,68 +8,100 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-color);
             line-height: 1.6;
             
-            /* Poster.PNG */
-            background-image: linear-gradient(rgba(18, 18, 18, 0.75), rgba(18, 18, 18, 0.75)), url('https://raw.githubusercontent.com/Rumbleevents/rumbleevents.github.io/main/Poster.PNG');
+            /* Primary background with poster image and dark overlay */
+            background-image: 
+                linear-gradient(135deg, rgba(20, 20, 40, 0.85) 0%, rgba(40, 20, 60, 0.85) 100%),
+                url('https://raw.githubusercontent.com/Rumbleevents/rumbleevents.github.io/main/Poster.PNG');
             
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .ticket-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
-            max-width: 400px;
-            width: 100%;
-            box-sizing: border-box; /* Zorgt dat padding de kaart niet te breed maakt */
-            margin: 50px auto; /* Centreert de kaart netjes op het scherm */
+            max-width: 450px;
+            width: 90%;
+            box-sizing: border-box;
+            border: 2px solid rgba(0, 190, 245, 0.2);
         }
+
         h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 24px;
+            color: #1a1a2e;
+            margin: 0 0 15px 0;
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00bef5 0%, #0099cc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
         .description {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 25px;
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 30px;
         }
+
         .price-tag {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2c3e50;
-            background: #edf2f7;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a2e;
+            background: linear-gradient(135deg, #e0f7ff 0%, #cce7ff 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #00bef5;
         }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
         .tikkie-button {
-            display: block; /* Veranderd naar block zodat ze netjes onder elkaar stapelen */
-            background-color: #00bef5; /* Tikkie blauw/cyan */
-            color: black;
+            display: block;
+            background: linear-gradient(135deg, #00bef5 0%, #009ecb 100%);
+            color: white;
             text-decoration: none;
-            padding: 15px 30px;
-            font-weight: bold;
-            border-radius: 50px;
-            transition: background 0.3s ease;
+            padding: 16px 30px;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 190, 245, 0.4);
-            margin: 15px auto; /* Ruimte tussen de knoppen */
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
+
         .tikkie-button:hover {
-            background-color: #009ecb;
+            background: linear-gradient(135deg, #009ecb 0%, #0077a3 100%);
+            box-shadow: 0 8px 25px rgba(0, 190, 245, 0.6);
+            transform: translateY(-2px);
         }
+
+        .tikkie-button:active {
+            transform: translateY(0);
+        }
+
         .footer-note {
-            font-size: 11px;
-            color: #999;
-            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+            margin-top: 25px;
+            font-style: italic;
         }
     </style>
 </head>
@@ -77,20 +109,21 @@
 
     <div class="ticket-card">
         <h1>RumbleXRietschans</h1>
-        <p class="description">Leuk dat je erbij bent! Vul je gegevens in bij de betaling zodat we je op de gastenlijst kunnen zetten.
-            Voor verdere wensen ook hier vermelden.</p>
+        <p class="description">Leuk dat je erbij bent! Vul je gegevens in bij de betaling zodat we je op de gastenlijst kunnen zetten. Voor verdere wensen ook hier vermelden.</p>
         
         <div class="price-tag">
             Kies je bijdrage:
         </div>
 
-        <a href="https://tikkie.me/pay/5bdrubhpjtdr5ko1rjff" target="_blank" class="tikkie-button">
-            €15,- Bier en Fris
-        </a>
+        <div class="buttons-container">
+            <a href="https://tikkie.me/pay/5bdrubhpjtdr5ko1rjff" target="_blank" class="tikkie-button">
+                €15,- Bier en Fris
+            </a>
 
-        <a href="https://tikkie.me/pay/u0brhco8qq57kaopkvvn" target="_blank" class="tikkie-button">
-            €7,50 Alleen Fris
-        </a>
+            <a href="https://tikkie.me/pay/u0brhco8qq57kaopkvvn" target="_blank" class="tikkie-button">
+                €7,50 Alleen Fris
+            </a>
+        </div>
 
         <p class="footer-note">Na betaling is je aanmelding definitief.</p>
     </div>
