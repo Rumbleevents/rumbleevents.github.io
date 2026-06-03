@@ -69,26 +69,26 @@
         .countdown-timer {
             display: flex;
             justify-content: space-around;
-            gap: 4px;
+            gap: 3px;
         }
 
         .countdown-item {
             flex: 1;
             background: rgba(100, 50, 150, 0.7);
-            padding: 6px 4px;
+            padding: 5px 2px;
             border-radius: 6px;
             border: 1px solid rgba(200, 150, 255, 0.3);
         }
 
         .countdown-number {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 700;
             color: #ffffff;
             display: block;
         }
 
         .countdown-label {
-            font-size: 9px;
+            font-size: 8px;
             color: #d0d0ff;
             text-transform: uppercase;
             margin-top: 2px;
@@ -171,6 +171,10 @@
                     <span class="countdown-number" id="minutes">0</span>
                     <div class="countdown-label">Min</div>
                 </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">0</span>
+                    <div class="countdown-label">Sec</div>
+                </div>
             </div>
         </div>
 
@@ -204,27 +208,30 @@
             // Calculate the difference
             const difference = targetDate - now;
             
-            // Calculate days, hours, and minutes
+            // Calculate days, hours, minutes, and seconds
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
             
             // Update the DOM
             document.getElementById('days').textContent = days;
-            document.getElementById('hours').textContent = hours;
-            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
             
-            // If countdown is finished, you could add logic here
+            // If countdown is finished, set all to 0
             if (difference < 0) {
                 document.getElementById('days').textContent = '0';
-                document.getElementById('hours').textContent = '0';
-                document.getElementById('minutes').textContent = '0';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
             }
         }
         
-        // Update countdown immediately and then every minute
+        // Update countdown immediately and then every second for live countdown
         updateCountdown();
-        setInterval(updateCountdown, 60000);
+        setInterval(updateCountdown, 1000);
     </script>
 
 </body>
