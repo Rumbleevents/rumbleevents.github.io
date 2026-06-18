@@ -154,6 +154,16 @@
             transform: translateY(0);
         }
 
+        /* Aangepast: pointer-events weggelaten zodat we de klik kunnen meten */
+        .tikkie-button.disabled {
+            background: rgba(120, 120, 120, 0.4) !important;
+            color: rgba(255, 255, 255, 0.4) !important;
+            box-shadow: none !important;
+            cursor: not-allowed;
+            transform: none !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
         .registration-section {
             background: rgba(150, 100, 200, 0.6);
             padding: 15px;
@@ -243,6 +253,40 @@
             transform: translateY(-2px);
         }
 
+        /* Success melding styling */
+        .success-message {
+            display: none;
+            background: rgba(40, 167, 69, 0.4);
+            border: 1px solid rgba(40, 167, 69, 0.6);
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        /* Toegevoegd: Alert/Foutmelding styling */
+        .alert-message {
+            display: none;
+            background: rgba(220, 53, 69, 0.4);
+            border: 1px solid rgba(220, 53, 69, 0.6);
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 12px;
+            font-weight: 500;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Leuk extraatje: laat de melding kort schudden bij een klik */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
         .footer-note {
             font-size: 10px;
             color: #e0e0e0;
@@ -288,6 +332,10 @@
             Kies je bijdrage:
         </div>
 
+        <div id="alertMessage" class="alert-message">
+            ⚠️ Vul eerst het registratieformulier hieronder in!
+        </div>
+
         <div class="buttons-container">
             <a href="info.html" class="tikkie-button" style="background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: none;">
                 Belangrijke info
@@ -297,19 +345,23 @@
                 Line-Up
             </a>
 
-            <a href="https://betaalverzoek.rabobank.nl/betaalverzoek/?id=FazzP2DLSfGDFN2mJoVDsg" target="_blank" class="tikkie-button">
+            <a href="https://betaalverzoek.rabobank.nl/betaalverzoek/?id=FazzP2DLSfGDFN2mJoVDsg" target="_blank" class="tikkie-button pay-link disabled">
                 €15,- Bier/wijn en Fris
             </a>
 
-            <a href="https://betaalverzoek.rabobank.nl/betaalverzoek/?id=6uN9lmFCQfyzehkqjIlmXQ" target="_blank" class="tikkie-button">
+            <a href="https://betaalverzoek.rabobank.nl/betaalverzoek/?id=6uN9lmFCQfyzehkqjIlmXQ" target="_blank" class="tikkie-button pay-link disabled">
                 €7,50 Alleen Fris
             </a>
         </div>
 
-        <div class="registration-section">
+        <div id="successMessage" class="success-message">
+            ✓ Registratie succesvol! Kies nu hierboven je bijdrage om je aanmelding af te ronden.
+        </div>
+
+        <div class="registration-section" id="registrationSection">
             <div class="registration-title">Registreer hier</div>
-            
-            <form action="https://formspree.io/f/xzdqpnvd" method="POST">
+
+            <form id="registrationForm" action="https://formspree.io/f/xzdqpnvd" method="POST">
                 <input 
                     type="text" 
                     class="form-input" 
@@ -329,10 +381,8 @@
                     name="Wensen en opmerkingen" 
                     placeholder="Wensen (bijzonderheden, bestellingen, etc.)"
                 ></textarea>
-                
-                <input type="hidden" name="_next" value="https://rumbleevents.github.io/">
-                
-                <button type="submit" class="register-button">Registreren</button>
+
+                <button type="submit" class="register-button" id="submitBtn">Registreren</button>
             </form>
         </div>
 
@@ -365,6 +415,67 @@
 
         updateCountdown();
         setInterval(updateCountdown, 1000);
+
+        // Elementen selecteren
+        const form = document.getElementById('registrationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const registrationSection = document.getElementById('registrationSection');
+        const successMessage = document.getElementById('successMessage');
+        const alertMessage = document.getElementById('alertMessage');
+        const payLinks = document.querySelectorAll('.pay-link');
+
+        // NIEUW: Klikken op de betaallinks controleren
+        payLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Als de link nog de 'disabled' class heeft...
+                if (link.classList.contains('disabled')) {
+                    e.preventDefault(); // Zorg dat de link NIET opent
+                    alertMessage.style.display = 'block'; // Toon de foutmelding
+                    
+                    // Reset de animatie zodat hij elke keer opnieuw schudt bij een klik
+                    alertMessage.style.animation = 'none';
+                    setTimeout(() => { alertMessage.style.animation = ''; }, 10);
+                }
+            });
+        });
+
+        // Formulier afhandeling via Formspree
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            submitBtn.textContent = 'Verwerken...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alertMessage.style.display = 'none'; // Verberg de foutmelding als die er nog stond
+                    registrationSection.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    
+                    payLinks.forEach(link => {
+                        link.classList.remove('disabled');
+                    });
+                } else {
+                    alert('Er ging iets mis. Probeer het opnieuw.');
+                    submitBtn.textContent = 'Registreren';
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                alert('Netwerkfout. Controleer je internetverbinding.');
+                submitBtn.textContent = 'Registreren';
+                submitBtn.disabled = false;
+            });
+        });
     </script>
 
 </body>
